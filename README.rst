@@ -8,7 +8,7 @@ requirements:
 * `flask-peewee <https://github.com/coleifer/flask-peewee>`_
 * python 2.5 or greater
 
-.. image:: http://i.imgur.com/suBE0.png
+.. image:: http://i.imgur.com/suBE0l.png
 
 
 installing
