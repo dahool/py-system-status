@@ -1,0 +1,5 @@
+flask-peewee
+flask
+-- already taked care by flask --
+werkzeug
+jinja2

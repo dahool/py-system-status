@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!--[if IE]><![endif]-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{% block title %}System Status{% endblock %}</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <meta name="viewport" content="width=device-width; initial-scale=1.0">
+
+  <link rel="stylesheet" href="{{ url_for('admin.static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('admin.static', filename='css/bootstrap.min.responsive.css') }}">
+  <link rel="stylesheet" href="{{ url_for('admin.static', filename='css/chosen.css') }}">
+  <link rel="stylesheet" href="{{ url_for('admin.static', filename='css/datepicker.css') }}">
+  <link rel="stylesheet" href="{{ url_for('admin.static', filename='css/admin.css') }}">
+
+  <script src="{{ url_for('admin.static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('admin.static', filename='js/bootstrap.min.js') }}"></script>
+
+  {% block extra_script %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}admin{% endblock %}">
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+      	<span class="brand">Status</span>
+      	
+        {% block nav %}
+        <ul class="nav">
+          <li class="{% if request.endpoint == 'homepage' %}active{%endif%}"><a href="{{ url_for('homepage') }}">Home</a></li>
+          <li class="{% if request.endpoint == 'admin.index' %}active{%endif%}"><a href="{{ url_for('admin.index') }}">Administration</a></li>
+        </ul>
+		{% endblock %}
+		
+        <form action="{{ url_for('auth.logout') }}" class="navbar-form pull-right" method="get">
+          <button class="btn btn-danger">Logout</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+      <div class="row-fluid">
+  	  {% block main_content %}
+		 <div class="span12">
+		    <div class="content">
+		      <div class="page-header">
+		        <h1>{% block content_title %}{% endblock %} <small>{% block content_tagline %}{% endblock %}</small></h1>
+		      </div>
+		      {% block breadcrumbs_wrapper %}
+		      <ul class="breadcrumb">
+		        {% block breadcrumbs %}{% endblock %}
+		      </ul>
+		      {% endblock %}
+		      {% for category, message in get_flashed_messages(with_categories=true) %}
+		        <div class="alert alert-block alert-{{ category }}">
+		          <a class="close" data-dismiss="alert" href="#">×</a>
+		          <p>{{ message }}</p>
+		        </div>
+		      {% endfor %}
+		      {% block pre_content %}{% endblock %}
+		      {% block content %}{% endblock %}
+		    </div><!-- /content -->
+		 </div><!-- /row -->  
+  	  {% endblock %}
+  	  </div>
+      <hr />
+      <!--
+      <footer>
+        <p>{% block footer %}System Status{% endblock %}</p>
+      </footer>
+      -->
+  </div> <!-- /container-fluid -->
+</body>
+</html>

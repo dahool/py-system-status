@@ -1,0 +1,127 @@
+{% extends "admin/site_base.html" %}
+{% block extra_script %}
+<style>
+    .simple_list {
+        list-style: none outside none;
+        margin: 0 0 18px;
+    }
+    .proc_alive {
+        font-weight: bold;
+        color: green;
+    }
+    .proc_dead {
+        font-weight: bold;
+        color: red;
+    }
+    .proc_pid {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+{% block breadcrumbs_wrapper %}
+{% endblock %}
+{% block content %}
+
+<!-- CPU -->
+<ul class="breadcrumb">
+<li><h3>CPU</h3></li>
+</ul>
+<div class="well">
+{{status.current_cpu_usage()}}
+</div>
+
+<!-- Memory Usage -->
+<ul class="breadcrumb">
+<li><h3>Memory Usage</h3></li>
+</ul>
+{% set memorystatus = status.current_memory_usage() %}
+
+<table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th colspan="3">Physical</th>
+        <th colspan="3">Swap</th>
+      </tr>    
+      <tr>
+        <th>Total</th>
+        <th>Used</th>
+        <th>Free</th>
+        <th>Total</th>
+        <th>Used</th>
+        <th>Free</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>{{memorystatus.total}}</td>
+          <td>{{memorystatus.used}}</td>
+          <td>{{memorystatus.free}}</td>
+          <td>{{memorystatus.swaptotal}}</td>
+          <td>{{memorystatus.swapused}}</td>
+          <td>{{memorystatus.swapfree}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Disk Usage -->
+<ul class="breadcrumb">
+<li><h3>Disk Usage</h3></li>
+</ul>
+
+<table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Filesystem</th>
+        <th>Size</th>
+        <th>Used</th>
+        <th>Available</th>
+        <th>Use %</th>
+        <th>Mounted on</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for disk in status.disk_usage() %}
+        <tr>
+          <td>{{disk.dev}}</td>
+          <td>{{disk.size}}</td>
+          <td>{{disk.used}}</td>
+          <td>{{disk.avail}}</td>
+          <td>{{disk.usep}}</td>
+          <td>{{disk.mount}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+<!--Processes -->
+<ul class="breadcrumb">
+<li><h3>Processes</h3></li>
+</ul>
+
+<table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Process</th>
+        <th>Time</th>
+        <th>Count</th>
+        <th>CPU Usage (%)</th>
+        <th>Memory Usage (%)</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for proc in status.watched_process() %}
+        <tr>
+          <td><b>{{proc.name}}</b></td>
+          <td>{{proc.time}}</td>
+          <td {% if proc.pids %}class="proc_pid" title="{{proc.pids}}"{% endif %}>{{proc.count}}</td>
+          <td>{{proc.cpu}}</td>
+          <td>{{proc.memory}}</td>
+          <td>{% if proc.count > 0 %}<span class="proc_alive">Running</span>{% else %}<span class="proc_dead">Dead</span>{%endif%}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

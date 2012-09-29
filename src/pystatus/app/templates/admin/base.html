@@ -1,0 +1,46 @@
+{% extends "admin/site_base.html" %}
+
+{% block title %}{{super()}} | Admin{% endblock %}
+
+{% block extra_script %}
+  <script src="{{ url_for('admin.static', filename='js/bootstrap-datepicker.js') }}"></script>
+  <script src="{{ url_for('admin.static', filename='js/chosen.jquery.min.js') }}"></script>
+  <script src="{{ url_for('admin.static', filename='js/admin.js') }}"></script>  
+{% endblock %}
+  
+{% block main_content %}
+  <div class="span3"> <!-- sidebar -->
+    <div class="well sidebar-nav">
+      <h3>Navigation</h3>
+      {% block sidebar %}
+        <ul id="nav" class="nav nav-list">
+          {% for iter_admin in model_admins %}
+            <li{% if model_admin == iter_admin %} class="active"{% endif %}><a href="{{ url_for(iter_admin.get_url_name('index')) }}">{{ iter_admin.get_admin_name()|fix_underscores }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endblock %}
+    </div>
+  </div><!-- /sidebar -->
+
+  <div class="span9"> <!-- row -->
+    <div class="content"> <!-- content -->
+      <div class="page-header">
+        <h1>{% block content_title %}{% endblock %} <small>{% block content_tagline %}{% endblock %}</small></h1>
+      </div>
+      <ul class="breadcrumb">
+        <li><a href="{{ url_for('admin.index') }}">Dashboard</a></li>
+        {% block breadcrumbs %}{% endblock %}
+      </ul>
+      {% for category, message in get_flashed_messages(with_categories=true) %}
+        <div class="alert alert-block alert-{{ category }}">
+          <a class="close" data-dismiss="alert" href="#">×</a>
+          <p>{{ message }}</p>
+        </div>
+      {% endfor %}
+      {% block pre_content %}{% endblock %}
+      {% block content %}{% endblock %}
+    </div><!-- /content -->
+  </div><!-- /row -->
+{% endblock %}
+
+{% block footer %}Site administration{% endblock %}
