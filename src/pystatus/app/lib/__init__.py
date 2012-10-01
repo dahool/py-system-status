@@ -19,7 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 Created on 29/09/2012
 """
-
+import platform
+import datetime
 from pystatus.app.models import Process
 from .commands import get_command_output
 
@@ -57,6 +58,18 @@ class ProcessInfo:
 class SystemStatus:
     
     commands = {}
+    
+    @property
+    def hostname(self):
+        return platform.node()
+    
+    @property
+    def time(self):
+        return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+    @property
+    def uname(self):
+        return " ".join(platform.uname())
     
     def execute(self, cmd, *args):
         if args:
