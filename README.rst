@@ -29,14 +29,16 @@ initial setup
 -------------
 
 Create the database (by default, a sqlite db is used, it doesn't need a greatest db engine)
-
+::
     python syncdb.py
     python createsuperuser.py
     
 running
 --------
-    
+::
+
     python run.py
+
 
 Navigate to:
 
